@@ -33,3 +33,38 @@ ORDER BY total_delay_minutes DESC
 
 
 Sunrise Airways had the highest total delay time (14,382 minutes), followed closely by Navigator Air and Sky High — suggesting these airlines may need to review operational efficiency or scheduling.
+
+
+
+3. 
+
+```
+SELECT passenger.passenger_id, passenger.first_name, passenger.last_name, SUM (price) AS total_amount_spent
+FROM booking 
+JOIN passenger on booking.passenger_id = passenger.passenger_id
+GROUP BY passenger.passenger_id, passenger.first_name, passenger.last_name
+ORDER BY total_amount_spent DESC
+LIMIT 1;
+```
+<img width="664" height="72" alt="Screenshot 2025-11-06 at 10 36 52 AM" src="https://github.com/user-attachments/assets/79dc9a7e-87bb-4ece-a7f8-a215bd8c1735" />
+
+
+This query identifies the highest-spending passenger based on total booking price.
+
+4.
+```
+SELECT flight_id, flight_number, COUNT(delayreason.delay_reason_id) AS delay_reason_ids
+FROM flight
+JOIN delayreason ON flight.delay_reason_id = delayreason.delay_reason_id
+WHERE status = 'Delayed'
+GROUP BY flight.flight_id, flight_number
+HAVING COUNT(delayreason.delay_reason_id) = 1 
+
+
+```
+
+<img width="580" height="558" alt="Screenshot 2025-11-06 at 10 39 50 AM" src="https://github.com/user-attachments/assets/91f856d7-1103-4f94-9dfd-7b8c7113f877" />
+
+It joins the flight table with the delayreason table to match each flight to its delay cause, then filters the results to include only flights where the status is 'Delayed'.
+The results are grouped by each flight’s ID and number, and the HAVING clause ensures only flights with one delay reason are included.
+
